@@ -28,4 +28,9 @@ typedef struct virtual_memory {
 }   virtual_memory_t;
 
 
+typedef struct entity {
+    u8* ptr;
+    u16 size;
+} entity_t;
+
 #endif
