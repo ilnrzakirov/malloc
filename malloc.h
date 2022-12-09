@@ -39,6 +39,13 @@ typedef struct entity {
     u16 size;
 } entity_t;
 
+typedef struct		s_env
+{
+    struct s_header	*tiny;
+    struct s_header	*small;
+    struct s_header	*large;
+} t_env;
+
 typedef struct		s_header
 {
     void			*mem;
@@ -48,5 +55,6 @@ typedef struct		s_header
 }					t_header;
 
 pthread_mutex_t		global_mutex;
+t_env env;
 
 #endif
