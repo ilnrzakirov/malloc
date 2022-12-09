@@ -1,5 +1,55 @@
 #include "malloc.h"
 
+t_header	*get_last_header(t_header **list)
+{
+    t_header *tmp;
+
+    tmp = *list;
+    if (!tmp)
+        return (NULL);
+    while (tmp->next)
+        tmp = tmp->next;
+    return (tmp);
+}
+
+t_header	*map_tiny_chunk(size_t zone)
+{
+//    mmap - отражает адреса физической памяти в вируальной адресной пространстве
+    t_header	*last;
+
+    if (!env.tiny)
+    {
+        if ((env.tiny = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+            == MAP_FAILED)
+            return (NULL);
+        return (env.tiny);
+    }
+    else
+    {
+        last = get_last_header(&(g_env.tiny));
+        if ((last->next = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+            == MAP_FAILED)
+            return (NULL);
+        return (last->next);
+    }
+    return (NULL);
+}
+
+t_header	*find_free_chunk(t_header **list, size_t size)
+{
+//    поиск зафришенной зоны
+    t_header *tmp;
+
+    tmp = *list;
+    while (tmp)
+    {
+        if (tmp->free && tmp->size >= size)
+            return (tmp);
+        tmp = tmp->next;
+    }
+    return (NULL);
+}
+
 void		fill_fit(size_t size, t_header **add)
 {
     t_header	*tmp;
