@@ -12,6 +12,47 @@ t_header	*get_last_header(t_header **list)
     return (tmp);
 }
 
+t_header	*map_small_chunk(size_t zone)
+{
+    t_header	*last;
+
+    if (!env.small)
+    {
+        if ((env.small = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+            == MAP_FAILED)
+            return (NULL);
+        return (env.small);
+    }
+    else
+    {
+        last = get_last_header(&(env.small));
+        if ((last->next = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+            == MAP_FAILED)
+            return (NULL);
+        return (last->next);
+    }
+    return (NULL);
+}
+
+void		fill_info(size_t size, t_header **add)
+{
+    t_header	*tmp;
+    t_header	*tmp2;
+    t_header	*next;
+
+    tmp = *add;
+    next = tmp->next ? tmp->next : NULL;
+    tmp->ptr = tmp + 1;
+    tmp->free = 0;
+    tmp->next = (void*)tmp->ptr + size;
+    tmp2 = tmp->next;
+    tmp2->ptr = tmp2 + 1;
+    tmp2->size = tmp->size - size - sizeof(t_header);
+    tmp->size = size;
+    tmp2->free = 1;
+    tmp2->next = next;
+}
+
 t_header	*map_tiny_chunk(size_t zone)
 {
 //    mmap - отражает адреса физической памяти в вируальной адресной пространстве
@@ -93,6 +134,26 @@ void *allocate_memory_tinny(size_t size){
     return (ptr->ptr);
 }
 
+void		*allocate_small(size_t size)
+{
+    t_header	*ptr;
+
+    if ((ptr = find_fit(&(g_env.small), size)))
+    {
+        fill_fit(size, &ptr);
+        return (ptr->ptr);
+    }
+    if (!(ptr = find_free_chunk(&(env.small), size + sizeof(t_header))))
+    {
+        ptr = map_small_chunk(SMALL_ZONE);
+        ptr->size = SMALL_ZONE - sizeof(t_header);
+        fill_info(size, &ptr);
+        return (env.small->ptr);
+    }
+    fill_info(size, &ptr);
+    return (ptr->ptr);
+}
+
 void *malloc_init(size_t size){
 //    распределение зон хранения
     void *ptr;
@@ -100,7 +161,10 @@ void *malloc_init(size_t size){
         return NULL
     }
     else if (size <= TINY_SIZE){
-        ptr = allocate_memory(size);
+        ptr = allocate_memory_tinny(size);
+    }
+    else if (size <= SMALL_SIZE) {
+        ptr = allocate_small(size);
     }
     return (ptr)
 }
