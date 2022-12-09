@@ -39,4 +39,6 @@ typedef struct entity {
     u16 size;
 } entity_t;
 
+pthread_mutex_t		global_mutex;
+
 #endif
