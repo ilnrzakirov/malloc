@@ -39,6 +39,14 @@ typedef struct entity {
     u16 size;
 } entity_t;
 
+typedef struct		s_header
+{
+    void			*mem;
+    size_t			size;
+    int				free;
+    struct s_header	*next;
+}					t_header;
+
 pthread_mutex_t		global_mutex;
 
 #endif
