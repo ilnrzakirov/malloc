@@ -48,7 +48,7 @@ typedef struct		s_env
 
 typedef struct		s_header
 {
-    void			*mem;
+    void			*ptr;
     size_t			size;
     int				free;
     struct s_header	*next;
