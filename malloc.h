@@ -8,6 +8,7 @@
 # include <stdint.h>
 # include <pthread.h>
 # include <assert.h>
+# include <pthread.h>
 
 # define u8 uint8_t
 # define u16 uint16_t
