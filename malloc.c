@@ -15,6 +15,7 @@ t_header	*get_last_header(t_header **list)
 t_header	*map_tiny_chunk(size_t zone)
 {
 //    mmap - отражает адреса физической памяти в вируальной адресной пространстве
+//    возвращяет указатель на отображенную область памяти
     t_header	*last;
 
     if (!env.tiny)
