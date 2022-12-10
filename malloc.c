@@ -102,6 +102,35 @@ void		fill_fit(size_t size, t_header **add)
     tmp->size = size;
 }
 
+void		*allocate_large(size_t size)
+{
+    t_header	*ptr;
+
+    if (!(ptr = find_free_chunk(&(env.large), size)))
+    {
+        ptr = get_last_header(&(env.large));
+        if (ptr)
+        {
+            if ((ptr->next = (t_header*)mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
+                == MAP_FAILED)
+                return (NULL);
+            ptr = ptr->next;
+        }
+        else
+        {
+            if ((env.large = (t_header*)mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
+                == MAP_FAILED)
+                return (NULL);
+            ptr = env.large;
+        }
+    }
+    ptr->ptr = ptr + 1;
+    ptr->size = size;
+    ptr->free = 0;
+    ptr->next = NULL;
+    return (ptr->ptr);
+}
+
 t_header	*find_fit(t_header **list, size_t size)
 {
 //  поиск зафришенной подходящий по размерам зоны
@@ -166,6 +195,10 @@ void *malloc_init(size_t size){
     else if (size <= SMALL_SIZE) {
         ptr = allocate_small(size);
     }
+    else
+        ptr = allocate_large(size + sizeof(t_header));
+    if (ptr == MAP_FAILED)
+        return (NULL);
     return (ptr)
 }
 
