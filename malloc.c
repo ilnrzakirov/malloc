@@ -18,7 +18,7 @@ t_header	*map_small_chunk(size_t zone)
 
     if (!env.small)
     {
-        if ((env.small = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+        if ((env.small = (t_header*)mmap(0, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
             == MAP_FAILED)
             return (NULL);
         return (env.small);
@@ -26,7 +26,7 @@ t_header	*map_small_chunk(size_t zone)
     else
     {
         last = get_last_header(&(env.small));
-        if ((last->next = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+        if ((last->next = (t_header*)mmap(0, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
             == MAP_FAILED)
             return (NULL);
         return (last->next);
@@ -61,7 +61,7 @@ t_header	*map_tiny_chunk(size_t zone)
 
     if (!env.tiny)
     {
-        if ((env.tiny = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+        if ((env.tiny = (t_header*)mmap(0, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
             == MAP_FAILED)
             return (NULL);
         return (env.tiny);
@@ -69,7 +69,7 @@ t_header	*map_tiny_chunk(size_t zone)
     else
     {
         last = get_last_header(&(g_env.tiny));
-        if ((last->next = (t_header*)mmap(0, zone, PROT, MAP, -1, 0))
+        if ((last->next = (t_header*)mmap(0, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
             == MAP_FAILED)
             return (NULL);
         return (last->next);
