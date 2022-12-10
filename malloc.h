@@ -57,4 +57,18 @@ typedef struct		s_header
 pthread_mutex_t		global_mutex;
 t_env env;
 
+void *ft_malloc(size_t size);
+void *malloc_init(size_t size);
+void		*allocate_small(size_t size);
+void *allocate_memory_tinny(size_t size);
+t_header	*find_fit(t_header **list, size_t size);
+void		*allocate_large(size_t size);
+void		fill_fit(size_t size, t_header **add);
+t_header	*find_free_chunk(t_header **list, size_t size);
+t_header	*map_tiny_chunk(size_t zone);
+void		fill_info(size_t size, t_header **add);
+t_header	*map_small_chunk(size_t zone);
+t_header	*get_last_header(t_header **list);
+
+
 #endif
