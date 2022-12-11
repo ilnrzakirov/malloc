@@ -1,6 +1,6 @@
 NAME = libft_malloc_$(HOSTTYPE).so
 
-SRC = malloc.c free.c
+SRC = malloc.c free.c realloc.c show.c
 
 OBJ = $(SRC:%.c=obj/%.o)
 
