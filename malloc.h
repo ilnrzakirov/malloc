@@ -70,5 +70,13 @@ void		fill_info(size_t size, t_header **add);
 t_header	*map_small_chunk(size_t zone);
 t_header	*get_last_header(t_header **list);
 
+void ft_free(void *ptr);
+void		join_headers(t_header *ptr);
+void		free_large(t_header *ptr);
+t_header	*find_list(t_header *ptr);
+t_header	*find_mem_chunk(void *ptr, int flag);
+t_header	*find_ptr(void *ptr, t_header *list, int flag);
+void		free_other(t_header *list, t_header *ptr, size_t size, size_t tmp);
+
 
 #endif
