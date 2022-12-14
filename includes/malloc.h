@@ -9,6 +9,7 @@
 # include <pthread.h>
 # include <assert.h>
 # include <pthread.h>
+# include "../libft/libft.h"
 
 # define u8 uint8_t
 # define u16 uint16_t
