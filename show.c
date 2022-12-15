@@ -46,9 +46,9 @@ size_t		print_memory(char *str, t_header *list)
     {
         if (list->free == 0)
         {
-            put_pointer(list->mem);
+            put_pointer(list->ptr);
             ft_putstr_fd(" - ", STDOUT_FILENO);
-            put_pointer((void*)list->mem + list->size);
+            put_pointer((void*)list->ptr + list->size);
             ft_putstr_fd(" : ", STDOUT_FILENO);
             print_num(list->size);
             ft_putendl_fd(" octets", STDOUT_FILENO);

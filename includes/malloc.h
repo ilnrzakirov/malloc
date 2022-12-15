@@ -11,16 +11,19 @@
 # include <pthread.h>
 # include "../libft/libft.h"
 
+
 # define u8 uint8_t
 # define u16 uint16_t
 # define STACK_SIZE 32
 # define HEAP_SIZE STACK_SIZE * 4
 # define HEADER 4
 
+
 # define TINY_SIZE			(size_t)getpagesize() * 2
 # define SMALL_SIZE			(size_t)getpagesize() * 16
 # define TINY_ZONE			(size_t)(TINY_SIZE + sizeof(t_header)) * 100
 # define SMALL_ZONE			(size_t)(SMALL_SIZE + sizeof(t_header)) * 100
+
 
 typedef struct virtual_memory {
     u8 stack[STACK_SIZE];

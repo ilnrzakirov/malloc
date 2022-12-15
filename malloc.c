@@ -68,7 +68,7 @@ t_header	*map_tiny_chunk(size_t zone)
     }
     else
     {
-        last = get_last_header(&(g_env.tiny));
+        last = get_last_header(&(env.tiny));
         if ((last->next = (t_header*)mmap(0, zone, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))
             == MAP_FAILED)
             return (NULL);
@@ -153,12 +153,12 @@ void *allocate_memory_tinny(size_t size){
         fill_fit(size, &ptr);
         return (ptr->ptr);
     }
-    if (!(ptr = find_free_chunk(&(g_env.tiny), size + sizeof(t_header))))
+    if (!(ptr = find_free_chunk(&(env.tiny), size + sizeof(t_header))))
     {
         ptr = map_tiny_chunk(TINY_ZONE);
         ptr->size = TINY_ZONE - sizeof(t_header);
         fill_info(size, &ptr);
-        return (g_env.tiny->ptr);
+        return (env.tiny->ptr);
     }
     return (ptr->ptr);
 }
@@ -167,7 +167,7 @@ void		*allocate_small(size_t size)
 {
     t_header	*ptr;
 
-    if ((ptr = find_fit(&(g_env.small), size)))
+    if ((ptr = find_fit(&(env.small), size)))
     {
         fill_fit(size, &ptr);
         return (ptr->ptr);
@@ -187,7 +187,7 @@ void *malloc_init(size_t size){
 //    распределение зон хранения
     void *ptr;
     if (size <= 0) {
-        return NULL
+        return NULL;
     }
     else if (size <= TINY_SIZE){
         ptr = allocate_memory_tinny(size);
@@ -199,7 +199,7 @@ void *malloc_init(size_t size){
         ptr = allocate_large(size + sizeof(t_header));
     if (ptr == MAP_FAILED)
         return (NULL);
-    return (ptr)
+    return (ptr);
 }
 
 void *ft_malloc(size_t size){
